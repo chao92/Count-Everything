@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+	<meta charset="utf-8" />
+	<head>
+		<style>
+			body {
+				font-family: Arial, Helvetica, sans-serif;
+			}
+			#logo {
+				font-size: 32pt;
+				color: #222;
+			}
+			#wrapper {
+				margin: 0 auto;
+				width: 99%;
+				text-align: center;
+			}
+			#text {
+				display: inline-block;
+				width: 300px;
+				background-color: #ffc;
+				padding: 10px;
+				float: left;
+				top: 0px;
+				text-align: left;
+			}
+			#depiction {
+				display: inline-block;
+			}
+			#sql {
+				padding: 5px;
+				background: #eff;
+				margin-top: 20px;
+			}
+			button {
+				background-color: #6ef;
+				border: 1px solid #4ab;
+				border-radius: 8px;
+				padding: 5px;
+				box-shadow: 1px 1px 3px #222;
+			}
+			.ga4gh {
+				background-color: #fdd ! important;
+				padding: 2px;
+			}
+			.md2k {
+				background-color: #dfd ! important;
+				padding: 2px;
+			}
+			.picsure {
+				background-color: #ddf ! important;
+				padding: 2px;
+			}
+		</style>
+		<link href="wqb.css" rel="stylesheet">
+		<script type="text/javascript" src="wqb.js"></script>
+		<script type="text/javascript">
+			function submit()
+			{
+				var initial = Blocks.get("BL1");
+				if(!exist())
+				{
+					window.location.href = "MultiThreadQuery.php?" + initial.serialize();
+					//file_exists = 1;
+				}
+			}
+			function submitunsecure()
+			{
+				var initial = Blocks.get("BL1");
+				window.location.href = "NonSecureMultiThreadQuery.php?" + initial.serialize();
+			}
+			var ContentTemplate = {
+				'ga4gh': {
+					"Chromosome" : "",
+					"Position" : "",
+					"ALT" : "",
+					"Assemblyid" : ""
+				}
+				,
+				'picsure': {
+					"Gender" : ['male','female'],
+					"Age" : "",
+					"Race": ['white','black','mexico','other_hispanic','other'],
+					"Mean_Systolic": "",
+					"Mean_Diastolic": "",
+					"BMI": "",
+					"Height": "",
+					"Weight":"",
+					"Serum_Glucose": "",
+					"Uric_Acid": "",
+					"Total_Cholesterol": ""
+				}
+				,
+				'md2k': {
+					"HeartRate" : "",
+					"Date" : "",
+					"AmbientTemp" : "",
+					"BodyTemp" : "",
+					"Fat" : "",
+					"Height" : "",
+					"Weight" : "",
+					"BloodPressureSystolic" : "",
+					"BloodPressureDiastolic" : "",
+					"Sleep" : "",
+					"StepCount" : "",
+					"Glucose" : ""
+				}
+			};
+			function example1()
+			{
+				// remove all blocks
+				removeAllBlock();
+				// initial block must be defined
+				var aa = new Block("AND",null,"");
+				// add picsure blocks
+				var aa1a = new Block("AND",aa,"");
+				var aa1ac = new Block("",aa1a,"picsure.Gender = 'female'");
+				aa1ac.complement();
+				// var aa1b = new Block("AND",aa1a,"");
+				var aa1b1 = new Block("",aa1a,"picsure.Mean_Diastolic <= '90'");
+				var aa1b2 = new Block("",aa1a,"picsure.Mean_Systolic <= '130'");
+				var aa1b3 = new Block("",aa1a,"picsure.BMI <= '25'");
+				var aa1b4 = new Block("",aa1a,"picsure.Race = 'white'");
+				// add md2k blocks
+				var aa1c = new Block("OR",aa,"");
+				var aa1c1 = new Block("AND",aa1c,"");
+				var aa1c1a = new Block("", aa1c1, "md2k.Glucose > '110'");
+				var aa1c1a = new Block("", aa1c1, "md2k.BloodPressureSystolic <= '110'");
+				var aa1c2 = new Block("",aa1c,"md2k.Fat > '16'");
+
+				// add ga4gh blocks
+				var aa2a = new Block("AND",aa,"");
+				var aa2a1 = new Block("",aa2a,"ga4gh.Chromosome = 'chr17'");
+				var aa2a2 = new Block("",aa2a,"ga4gh.Position = '35098007'");
+				var aa2a3 = new Block("",aa2a,"ga4gh.ALT = 'A'");
+				var aa2a4 = new Block("",aa2a,"ga4gh.Assemblyid = 'NCBI37'");
+				redraw();
+				addtext1();
+			}
+			function example2()
+			{
+				removeAllBlock();
+				// initial block must be defined
+				var aa = new Block("AND",null,"");
+				var aa1a = new Block("OR",aa,"");
+				var aa1ab = new Block("", aa1a, "picsure.Mean_Systolic <= '100'");
+				//var aa1ac = new Block("", aa1a, "picsure.Mean_Distolic <= '70'");
+				var aa1b = new Block("OR", aa, "");
+				var aa1bb = new Block("", aa1b, "md2k.Sleep <= '6'");
+				var aa1bc = new Block("", aa1b, "md2k.BodyTemp >= '38'");
+				var aa1bd = new Block("", aa1b, "md2k.Glucose >= '110'");
+
+				//
+				var aa2a = new Block("AND",aa,"");
+				var aa2a1 = new Block("",aa2a,"ga4gh.Chromosome = 'chr17'");
+				var aa2a2 = new Block("",aa2a,"ga4gh.Position = '35098007'");
+				var aa2a3 = new Block("",aa2a,"ga4gh.ALT = 'A'");
+				var aa2a4 = new Block("",aa2a,"ga4gh.Assemblyid = 'NCBI37'");
+				redraw();
+				addtext2();
+			}
+			function example3()
+			{
+				removeAllBlock();
+				// initial block must be defined
+				var aa = new Block("AND",null,"");
+				// picsure
+				var aa1 = new Block("OR",aa,"");
+				var aa1a = new Block("AND", aa1, "");
+				var aa1ab = new Block("",aa1a,"picsure.Uric_Acid >= '3.5'");
+				var aa1ac = new Block("",aa1a,"picsure.Uric_Acid <= '7.2'");
+				// var aa1b = new Block("AND",aa1,"");
+				var aa1bb =  new Block("", aa1,"picsure.Total_Cholesterol <= '200'");
+				var aa1c = new Block("AND", aa1, "");
+				var aa1cb =  new Block("", aa1c, "picsure.BMI <= '30'");
+				var aa1cc = new Block("", aa1c, "picsure.BMI >= '20'");
+				//md2k  
+				var aa2a = new Block("AND",aa,"");
+				var aa2ab = new Block("", aa2a, "md2k.Glucose >= '100'");
+				var aa2ac = new Block("", aa2a, "md2k.Glucose <= '125'");
+				// add ga4gh blocks
+				var aa3a = new Block("AND",aa,"");
+				var aa3a1 = new Block("",aa3a,"ga4gh.Chromosome = 'chr17'");
+				var aa3a2 = new Block("",aa3a,"ga4gh.Position = '35098007'");
+				var aa3a3 = new Block("",aa3a,"ga4gh.ALT = 'A'");
+				var aa3a4 = new Block("",aa3a,"ga4gh.Assemblyid = 'NCBI37'");
+				redraw();
+				addtext3();
+			}
+		</script>
+		<body>
+			<div id="modal" class="modal">
+				<div class="modal-content">
+					<form id="conditionparams">
+						<input type=hidden id="cond1">
+					</input>
+					<input type=hidden id="cond2">
+				</input>
+				<input type=hidden id="cparent">
+			</input>
+			<input type=hidden id="ctype">
+		</input>
+		<div class="modal-header">
+			<span id="dialogtitle">Select condition parameters</span>
+			<span class="cancel" onClick="dialogClose(false);">Cancel</span>
+			<span class="confirm" onClick="dialogClose(true);">OK</span>
+		</div>
+		<div class="modal-body" id="menu">
+		</div>
+	</form>
+</div>
+</div>
+<div id="wrapper">
+	<div id="logo">
+		Count Everything
+	</div>
+	<div id="start">
+		<img src="count_everything_header.png" width="300">
+	</div>
+	<!--add example buttons-->
+	<div id="example">
+		<button type="button" onclick="example1()">Example 1(Default)</button>
+		<button type="button" onclick="example2()">Example 2</button>
+		<button type="button" onclick="example3()">Example 3</button>
+	</div>
+	<div style="display: block;position: relative; margin-top:10px;">
+		<div id ="text">
+		</div>
+		<div id="depiction">
+			<div id="query">
+			</div>
+			|
+			<br>
+			<div>
+				<div class="go" style="display:inline-block;" onclick="submit();">
+					?
+				</div>
+				<div class="go" style='background-color:orange; display: inline-block; position: relative;' onclick="submitunsecure()">
+					?
+					<span style='font-size: 24pt; position: absolute; top: 0px; right: 0px;'>&#9763;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="sql">
+	</div>
+</div>
+<script type="text/javascript">
+	var ContentTemplate = {
+		'ga4gh': {
+			"Chromosome" : "",
+			"Position" : "",
+			"ALT" : "",
+			"Assemblyid" : ""
+		}
+		,
+		'picsure': {
+			"Gender" : ['male','female'],
+			"Age" : "",
+			"Race": ['white','black','mexico','other_hispanic','other'],
+			"Mean_Systolic": "",
+			"Mean_Diastolic": "",
+			"BMI": "",
+			"Height": "",
+			"Weight":"",
+			"Serum_Glucose": "",
+			"Uric_Acid": "",
+			"Total_Cholesterol": ""
+		}
+		,
+		'md2k': {
+			"HeartRate" : "",
+			"Date" : "",
+			"AmbientTemp" : "",
+			"BodyTemp" : "",
+			"Fat" : "",
+			"Height" : "",
+			"Weight" : "",
+			"BloodPressureSystolic" : "",
+			"BloodPressureDiastolic" : "",
+			"Sleep" : "",
+			"StepCount" : "",
+			"Glucose" : ""
+		}
+	};
+	// initial block must be defined
+	var aa = new Block("AND",null,"");
+	example1();
+	redraw();
+</script>
+<script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?u=Bwib&d=5JYujxYKE8XEmkk8OZxWL6J_5HV1TPIKnRnRiGIi31Y"></script>
+</body>
