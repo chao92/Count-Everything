@@ -12,7 +12,9 @@ install PHP/JAVA Bridge. Reference: http://dasunhegoda.com/access-java-function-
 
 java implement of HME. Reference:  https://github.com/achenfengb/CountEverything
 ### System workflow
-![alt tag](https://github.com/chao92/Count-Everything/blob/master/workflow.png "Count Everything Workflow")
+<p align="center">
+  <img src="https://github.com/chao92/Count-Everything/blob/master/workflow.png">
+</p>
 
 
 ## Demo Video
