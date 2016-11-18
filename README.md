@@ -18,8 +18,10 @@ java implement of HME. Reference:  https://github.com/achenfengb/CountEverything
 
 
 ## Demo Video
+<p align="center">
 <a href="https://www.youtube.com/watch?v=tkOnAIJjJWw
 " target="_blank"><img src="https://github.com/chao92/Count-Everything/blob/master/Screen%20Shot%202016-11-18%20at%2010.52.51%20AM.png" 
 alt="IMAGE ALT TEXT HERE" width="550" height="300" border="10" /></a>
+</p>
 
 ## For more information
