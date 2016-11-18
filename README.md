@@ -25,3 +25,4 @@ alt="IMAGE ALT TEXT HERE" width="550" height="300" border="10" /></a>
 </p>
 
 ## For more information
+If you have any question or bug report, feel free to email me at chao@ou.edu.
